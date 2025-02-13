@@ -13,17 +13,20 @@
       <p>En estoque: {{ pdt.stock }}</p>
     </div>
     <div class="contain-btn-pdt">
-      <!-- <div class="btn-to-card"> -->
-      <v-btn append-icon="">Ajouter au Panier</v-btn>
-
-      <!-- <button>Ajouter au Panier</button> -->
-      <!-- </div> -->
+      <v-btn @click="addToCart">Ajouter au Panier</v-btn>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import type { Product } from "~/interfaces/products";
+
 defineProps(["pdt"]);
+
+const cart = useCartStore();
+const addToCart = (pdt: Product) => {
+  cart.addToCart(pdt);
+};
 </script>
 
 <style scoped>
@@ -39,11 +42,5 @@ defineProps(["pdt"]);
   display: flex;
   justify-content: flex-end;
   align-items: right;
-}
-
-.btn-to-card {
-  border: none;
-}
-.btn-to-card:hover {
 }
 </style>
