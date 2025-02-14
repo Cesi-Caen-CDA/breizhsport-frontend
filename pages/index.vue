@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="contain-index">
     <h1>First page BReizhSport</h1>
     <p>>Welcomme to BreizhSport</p>
   </div>
@@ -10,10 +10,6 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-// export default {
-//   name: IndexPAge,
-// };
-</script>
+<script lang="ts" setup></script>
 
 <style></style>
