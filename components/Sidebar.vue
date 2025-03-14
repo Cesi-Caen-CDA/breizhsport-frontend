@@ -1,226 +1,233 @@
 <template>
-  <aside :class="`${is_expanded ? 'is-expanded' : ''}`">
-    <div class="logo">
-      <img :src="logoURL" alt="Vue" />
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="logo">
+        <img :src="logoURL" alt="Vue" />
+      </div>
+
+      <div class="menu">
+        <NuxtLink to="/" class="button">
+          <Icon name="mdi:home" class="icon" />
+          <span class="text">Home</span>
+        </NuxtLink>
+        <NuxtLink to="/products" class="button">
+          <Icon name="uil:github" class="icon" />
+          <span class="text">Products</span>
+        </NuxtLink>
+        <NuxtLink to="/contact" class="button">
+          <Icon name="mdi-email" class="icon" />
+          <span class="text">Contact</span>
+        </NuxtLink>
+        <NuxtLink v-if="isAdmin" to="/admin" class="button">
+          <Icon name="mdi:shield-crown" class="icon" />
+          <span class="text">Admin</span>
+        </NuxtLink>
+      </div>
     </div>
 
-    <div class="menu-toggle-wrap">
-      <button class="menu-toggle" @click="ToggleMenu">
-        <span class="material-icons">keyboard_double_arrow_right</span>
-      </button>
+    <div class="nav-center">
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Search products..."
+          v-model="searchQuery"
+          @input="handleSearch"
+        />
+        <Icon name="mdi:magnify" class="search-icon" />
+      </div>
     </div>
 
-    <h3>Menu</h3>
-    <div class="menu">
-      <NuxtLink to="/" class="button">
-        <span class="material-icons">home</span>
-        <span class="text">Home</span>
+    <div class="nav-right">
+      <NuxtLink to="/cart" class="cart-button">
+        <Icon name="mdi:cart" class="icon" />
+        <span class="cart-count">{{ cartItemCount }}</span>
       </NuxtLink>
-      <NuxtLink to="/products" class="button">
-        <span class="material-icons">Products</span>
-        <span class="text">Products</span>
-      </NuxtLink>
-      <NuxtLink to="/profil" class="button">
-        <span class="material-icons">Profil</span>
-        <span class="text">Profil</span>
-      </NuxtLink>
-      <NuxtLink to="/contact" class="button">
-        <span class="material-icons">email</span>
-        <span class="text">Contact</span>
+      <NuxtLink to="/compte" class="compte-button">
+        <Icon name="mdi:account" class="icon" />
+        <span class="text">Compte</span>
       </NuxtLink>
     </div>
-
-    <div class="flex"></div>
-
-    <div class="menu">
-      <NuxtLink to="/settings" class="button">
-        <span class="material-icons">settings</span>
-        <span class="text">Settings</span>
-      </NuxtLink>
-    </div>
-  </aside>
+  </nav>
 </template>
 
 <script setup>
 import { NuxtLink } from "#components";
+import { ref, computed } from "vue";
+const cart = useCartStore();
+const searchQuery = ref("");
+const isAdmin = ref(false); // This should be set based on user authentication
 
-const is_expanded = ref(false);
+// Defina a propriedade logoURL
+const logoURL = ref("/path/to/logo.png"); // Substitua pelo caminho correto do logo
 
-onMounted(() => {
-  if (typeof window !== "undefined") {
-    is_expanded.value = localStorage.getItem("is_expanded") === "true";
-  }
-});
+// Get cart items count
+const cartItemCount = computed(() => cart.totalItems);
 
-const ToggleMenu = () => {
-  is_expanded.value = !is_expanded.value;
-  if (typeof window !== "undefined") {
-    localStorage.setItem("is_expanded", is_expanded.value);
-  }
+// Search functionality
+const emit = defineEmits(["search"]);
+const handleSearch = () => {
+  emit("search", searchQuery.value);
 };
 </script>
 
 <style lang="scss" scoped>
-aside {
+.navbar {
   position: fixed;
-  left: 0;
   top: 0;
-  bottom: 0;
-
-  display: flex;
-  flex-direction: column;
-
+  left: 0;
+  right: 0;
+  height: 64px;
   background-color: var(--dark);
   color: var(--light);
-
-  width: calc(2rem + 32px);
-  overflow: hidden;
-  min-height: 100vh;
-  padding: 1rem;
-
-  transition: width 0.2s ease-in-out;
-
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   z-index: 100;
 
-  &.is-expanded {
-    width: var(--sidebar-width);
-  }
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 
-  transition: 0.2s ease-in-out;
+    .logo {
+      img {
+        width: 2rem;
+      }
+    }
 
-  .flex {
-    flex: 1 1 0%;
-  }
-
-  .logo {
-    margin-bottom: 1rem;
-
-    img {
-      width: 2rem;
+    .menu {
+      display: flex;
+      gap: 1rem;
     }
   }
 
-  .menu-toggle-wrap {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1rem;
+  .nav-center {
+    flex: 1;
+    max-width: 500px;
+    margin: 0 2rem;
 
-    position: relative;
-    top: 0;
-    transition: 0.2s ease-in-out;
+    .search-box {
+      position: relative;
+      width: 100%;
 
-    .menu-toggle {
-      transition: 0.2s ease-in-out;
-      .material-icons {
-        font-size: 2rem;
+      input {
+        width: 100%;
+        padding: 0.5rem 2.5rem 0.5rem 1rem;
+        border-radius: 4px;
+        border: none;
+        background-color: var(--dark-alt);
         color: var(--light);
-        transition: 0.2s ease-out;
-      }
 
-      &:hover {
-        .material-icons {
-          color: var(--primary);
-          transform: translateX(0.5rem);
+        &:focus {
+          outline: none;
+          box-shadow: 0 0 0 2px var(--primary);
         }
       }
+
+      .search-icon {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--grey);
+      }
     }
   }
 
-  h3,
-  .button .text {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Adicione esta linha para espaçamento entre os botões */
+    justify-content: center; /* Centraliza os itens dentro da nav-right */
 
-  h3 {
-    color: var(--grey);
-    font-size: 0.875rem;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-  }
+    .cart-button {
+      background: none;
+      border: none;
+      color: var(--light);
+      position: relative;
+      cursor: pointer;
+      padding: 0.5rem;
 
-  .menu {
-    margin: 0 -1rem;
+      &:hover {
+        color: var(--primary);
+      }
 
-    .button {
+      .cart-count {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: var(--primary);
+        color: var(--light);
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 0.75rem;
+      }
+    }
+
+    .compte-button {
       display: flex;
       align-items: center;
+      gap: 0.5rem;
       text-decoration: none;
-
-      transition: 0.2s ease-in-out;
+      color: var(--light);
       padding: 0.5rem 1rem;
-
-      .material-icons {
-        font-size: 2rem;
-        color: var(--light);
-        transition: 0.2s ease-in-out;
-      }
-      .text {
-        color: var(--light);
-        transition: 0.2s ease-in-out;
-      }
+      border-radius: 4px;
+      transition: 0.2s ease-in-out;
 
       &:hover {
         background-color: var(--dark-alt);
+        color: var(--primary);
 
-        .material-icons,
-        .text {
+        .icon {
           color: var(--primary);
         }
       }
 
-      &.router-link-exact-active {
-        background-color: var(--dark-alt);
-        border-right: 5px solid var(--primary);
-
-        .material-icons,
-        .text {
-          color: var(--primary);
-        }
+      .icon {
+        font-size: 1.5rem;
+        transition: 0.2s ease-in-out;
       }
     }
   }
 
-  .footer {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+  .button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--light);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: 0.2s ease-in-out;
 
-    p {
-      font-size: 0.875rem;
-      color: var(--grey);
-    }
-  }
+    &:hover {
+      background-color: var(--dark-alt);
+      color: var(--primary);
 
-  &.is-expanded {
-    width: var(--sidebar-width);
-
-    .menu-toggle-wrap {
-      top: -3rem;
-
-      .menu-toggle {
-        transform: rotate(-180deg);
+      .icon {
+        color: var(--primary);
       }
     }
 
-    h3,
-    .button .text {
-      opacity: 1;
-    }
+    &.router-link-exact-active {
+      background-color: var(--dark-alt);
+      color: var(--primary);
 
-    .button {
-      .material-icons {
-        margin-right: 1rem;
+      .icon {
+        color: var(--primary);
       }
     }
 
-    .footer {
-      opacity: 0;
+    .icon {
+      font-size: 1.5rem;
+      transition: 0.2s ease-in-out;
     }
   }
+}
 
-  @media (max-width: 1024px) {
-    position: absolute;
-    z-index: 99;
-  }
+// Add margin to main content to account for fixed navbar
+:global(main) {
+  margin-top: 64px;
 }
 </style>

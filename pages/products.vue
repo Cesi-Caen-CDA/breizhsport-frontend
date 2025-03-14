@@ -28,6 +28,7 @@ const { data, pending, error, refresh } = await useFetch<Product[]>(
 
 <style>
 .contain-all-pdt {
+  background-color: brown;
   width: 100%;
   height: 100%;
 }
