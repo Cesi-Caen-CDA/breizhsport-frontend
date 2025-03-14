@@ -63,14 +63,32 @@ const registerUser = async () => {
   }
 
   try {
-    const response = await $fetch("http://localhost:8000/users", {
+    // 🔹 Étape 1 : Inscription
+    const registerResponse = await $fetch("http://localhost:8000/users", {
       method: "POST",
       body: user.value,
     });
 
-    if (response.token) {
-      authStore.login(response.token); // 🔹 Met à jour Pinia avec le token
-      router.push("/"); // Redirige vers l'accueil
+    if (!registerResponse || !registerResponse.user._id) {
+      throw new Error("L'inscription a échoué.");
+    }
+
+    // 🔹 Assurer que `userId` est bien une string
+    const userId = registerResponse.user._id.toString();
+
+    // 🔹 Étape 2 : Connexion automatique après l'inscription
+    const loginResponse = await $fetch("http://localhost:8000/auth/login", {
+      method: "POST",
+      body: {
+        email: user.value.email,
+        password: user.value.password,
+      },
+    });
+
+    if (loginResponse.token && loginResponse.userId) {
+      authStore.login(loginResponse.token); // 🔹 Stocker le token
+      localStorage.setItem("userId", loginResponse.userId); // 🔹 Stocker l'ID utilisateur
+      router.push("/"); // Rediriger vers l'accueil
     }
   } catch (error) {
     console.error("Erreur API :", error);

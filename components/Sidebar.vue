@@ -46,7 +46,7 @@
 
       <!-- Si l'utilisateur est connecté, afficher le bouton Compte et Déconnexion -->
       <template v-if="isAuthenticated">
-        <NuxtLink to="/compte" class="compte-button">
+        <NuxtLink to="/profile" class="compte-button">
           <Icon name="mdi:account" class="icon" />
           <span class="text">Compte</span>
         </NuxtLink>
