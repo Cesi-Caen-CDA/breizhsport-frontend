@@ -2,7 +2,7 @@
   <nav class="navbar">
     <div class="nav-left">
       <div class="logo">
-        <img :src="logoURL" alt="Vue" />
+        <img :src="logoURL" alt="breizh" />
       </div>
 
       <div class="menu">
@@ -82,7 +82,7 @@ const authStore = useAuthStore(); // Utilisation de Pinia
 const cart = useCartStore();
 const searchQuery = ref("");
 const isAdmin = ref(false);
-const logoURL = ref("/path/to/logo.png");
+const logoURL = ref("/bretagne-flag.jpg");
 
 // 🔹 Utilisation de `computed` pour que la navbar se mette à jour dynamiquement
 const isAuthenticated = computed(() => authStore.isAuthenticated);
