@@ -35,9 +35,10 @@ const loginUser = async () => {
       body: { email: email.value, password: password.value },
     });
 
-    if (response.token) {
-      authStore.login(response.token); // 🔹 Utilisation correcte de `authStore`
-      router.push("/"); // Redirige vers l'accueil
+    if (response.token && response.userId) {
+      authStore.login(response.token);
+      localStorage.setItem("userId", response.userId); // ✅ Stocker l'ID utilisateur en string
+      router.push("/");
     }
   } catch (error) {
     console.log(error);
