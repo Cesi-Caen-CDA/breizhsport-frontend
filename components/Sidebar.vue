@@ -27,12 +27,7 @@
 
     <div class="nav-center">
       <div class="search-box">
-        <input
-          type="text"
-          placeholder="Search products..."
-          v-model="searchQuery"
-          @input="handleSearch"
-        />
+        <input type="text" placeholder="Search products..." v-model="searchQuery" @input="handleSearch" />
         <Icon name="mdi:magnify" class="search-icon" />
       </div>
     </div>
@@ -42,28 +37,60 @@
         <Icon name="mdi:cart" class="icon" />
         <span class="cart-count">{{ cartItemCount }}</span>
       </NuxtLink>
-      <NuxtLink to="/compte" class="compte-button">
-        <Icon name="mdi:account" class="icon" />
-        <span class="text">Compte</span>
-      </NuxtLink>
+
+      <!-- Si l'utilisateur est connecté, afficher le bouton Compte et Déconnexion -->
+      <template v-if="isAuthenticated">
+        <NuxtLink to="/compte" class="compte-button">
+          <Icon name="mdi:account" class="icon" />
+          <span class="text">Compte</span>
+        </NuxtLink>
+        <button class="logout-button" @click="logout">
+          <Icon name="mdi:logout" class="icon" />
+          <span class="text">Déconnexion</span>
+        </button>
+      </template>
+
+      <!-- Si l'utilisateur n'est pas connecté, afficher SignIn et SignUp -->
+      <template v-else>
+        <NuxtLink to="/signin" class="button">
+          <Icon name="mdi:login" class="icon" />
+          <span class="text">Se connecter</span>
+        </NuxtLink>
+        <NuxtLink to="/signup" class="button">
+          <Icon name="mdi:account-plus" class="icon" />
+          <span class="text">S'inscrire</span>
+        </NuxtLink>
+      </template>
     </div>
   </nav>
 </template>
 
 <script setup>
-import { NuxtLink } from "#components";
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/authStore"; // Import du store
+
+const router = useRouter();
+const authStore = useAuthStore(); // Utilisation de Pinia
+
 const cart = useCartStore();
 const searchQuery = ref("");
-const isAdmin = ref(false); // This should be set based on user authentication
+const isAdmin = ref(false);
+const logoURL = ref("/path/to/logo.png");
 
-// Defina a propriedade logoURL
-const logoURL = ref("/path/to/logo.png"); // Substitua pelo caminho correto do logo
+// 🔹 Utilisation de `computed` pour que la navbar se mette à jour dynamiquement
+const isAuthenticated = computed(() => authStore.isAuthenticated);
 
-// Get cart items count
+// Déconnexion de l'utilisateur
+const logout = () => {
+  authStore.logout(); // 🔹 Met à jour Pinia
+  router.push("/signin"); // Redirige vers la page de connexion
+};
+
+// Compteur d'articles dans le panier
 const cartItemCount = computed(() => cart.totalItems);
 
-// Search functionality
+// Émettre un événement de recherche
 const emit = defineEmits(["search"]);
 const handleSearch = () => {
   emit("search", searchQuery.value);
