@@ -22,6 +22,12 @@
           <Icon name="mdi:shield-crown" class="icon" />
           <span class="text">Admin</span>
         </NuxtLink>
+
+        <!-- 🔹 Lien vers la gestion des produits (accessible uniquement aux utilisateurs authentifiés) -->
+        <NuxtLink v-if="isAuthenticated" to="/manageProducts" class="button">
+          <Icon name="mdi:cog" class="icon" />
+          <span class="text">Gérer les produits</span>
+        </NuxtLink>
       </div>
     </div>
 
