@@ -20,14 +20,15 @@
 </template>
 
 <script lang="ts" setup>
-import type { Product } from "~/interfaces/products";
+import { useCartStore } from "~/stores/storeCart";
+import type { Product } from "~/interfaces/iproducts";
 
-defineProps(["pdt"]);
+const { pdt } = defineProps<{ pdt: Product }>();
+const cartStore = useCartStore();
 
-const cart = useCartStore();
-const addToCart = (pdt: Product) => {
-  cart.addToCart(pdt);
-};
+function addToCart() {
+  cartStore.addToCart(pdt);
+}
 </script>
 
 <style scoped>
