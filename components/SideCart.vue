@@ -26,7 +26,7 @@
         <strong>Total: € {{ cartStore.totalPrice.toFixed(2) }}</strong>
       </p>
       <button @click="cartStore.clearCart" class="clear-cart">
-        🧹 Limpar Carrinho
+        🧹 Nettoyer Panier
       </button>
     </div>
   </div>
