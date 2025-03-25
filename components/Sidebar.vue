@@ -33,16 +33,22 @@
 
     <div class="nav-center">
       <div class="search-box">
-        <input type="text" placeholder="Search products..." v-model="searchQuery" @input="handleSearch" />
+        <input
+          type="text"
+          placeholder="Chercher produit..."
+          v-model="searchQuery"
+          @input="handleSearch"
+        />
         <Icon name="mdi:magnify" class="search-icon" />
       </div>
     </div>
 
     <div class="nav-right">
-      <NuxtLink to="/cart" class="cart-button">
+      <button @click="cart.toggleCart" class="cart-button">
         <Icon name="mdi:cart" class="icon" />
         <span class="cart-count">{{ cartItemCount }}</span>
-      </NuxtLink>
+      </button>
+      <SideCart />
 
       <!-- Si l'utilisateur est connecté, afficher le bouton Compte et Déconnexion -->
       <template v-if="isAuthenticated">
@@ -75,6 +81,7 @@
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore"; // Import du store
+import { useCartStore } from "@/stores/storeCart"; // Import du store de panier
 
 const router = useRouter();
 const authStore = useAuthStore(); // Utilisation de Pinia
@@ -236,7 +243,7 @@ const handleSearch = () => {
 
     &:hover {
       background-color: var(--dark-alt);
-      color: var(--primary);
+      color: var (--primary);
 
       .icon {
         color: var(--primary);
