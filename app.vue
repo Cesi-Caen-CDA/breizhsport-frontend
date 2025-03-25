@@ -12,13 +12,15 @@
 
 <style lang="scss">
 :root {
-  --primary: #4ade80;
+  --primary: #5f79df;
   --primary-alt: #22c55e;
   --grey: #64748b;
-  --dark: #1e293b;
+  --dark: #321e3b;
   --dark-alt: #334155;
   --light: #f1f5f9;
   --sidebar-width: 300px;
+  --white: #ffff;
+  --black: #0000;
 }
 
 * {

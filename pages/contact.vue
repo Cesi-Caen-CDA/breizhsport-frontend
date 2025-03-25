@@ -1,11 +1,20 @@
 <template>
   <div class="contact-page">
-    <h1>Contact Us</h1>
+    <h1>Entre en contact avec nous</h1>
     <div class="contact-content">
-      <p>Get in touch with us</p>
+      <p>Estamos felizes em ouvir você! 🎉</p>
+      <p>Obrigado por entrar em contato com a equipe do BreizhSport!</p>
+      <p>
+        Sua mensagem é muito importante para nós, e ficamos contentes em saber
+        que você está conectado conosco. <p>
+          
+        </p> breve, responderemos para ajudar no
+        que for necessário. Se precisar de algo mais, fique à vontade para nos
+        avisar. 🚀💙
+      </p>
       <v-container>
         <v-card class="pa-6">
-          <h1 class="text-h4 mb-4">Contact Us</h1>
+          <!-- <h1 class="text-h4 mb-4">Nous contacter</h1> -->
           <v-form @submit.prevent="submitForm">
             <v-text-field
               v-model="form.name"
