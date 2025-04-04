@@ -2,10 +2,11 @@
   <div class="home-container">
     <!-- 🔹 Grande bannière avec le drapeau de la Bretagne -->
     <div class="banner">
-      <img src="/bretagne-flag.jpg" alt="Drapeau de la Bretagne" class="banner-image" />
       <div class="banner-overlay">
         <h1>Bienvenue sur Breizh Sport</h1>
-        <p>Votre boutique en ligne dédiée aux passionnés de sport en Bretagne !</p>
+        <p>
+          Votre boutique en ligne dédiée aux passionnés de sport en Bretagne !
+        </p>
       </div>
     </div>
 
@@ -13,11 +14,15 @@
     <div class="presentation">
       <h2>À propos de Breizh Sport</h2>
       <p>
-        Breizh Sport est une boutique en ligne qui vous propose un large choix de matériel sportif, adapté à tous les
-        niveaux et disciplines. Que vous soyez un athlète confirmé ou un amateur, trouvez tout ce dont vous avez besoin
-        pour pratiquer votre sport favori.
+        Breizh Sport est une boutique en ligne qui vous propose un large choix
+        de matériel sportif, adapté à tous les niveaux et disciplines. Que vous
+        soyez un athlète confirmé ou un amateur, trouvez tout ce dont vous avez
+        besoin pour pratiquer votre sport favori.
       </p>
-      <p>Nous mettons un point d'honneur à vous offrir des produits de qualité et un service irréprochable.</p>
+      <p>
+        Nous mettons un point d'honneur à vous offrir des produits de qualité et
+        un service irréprochable.
+      </p>
     </div>
 
     <!-- 🔹 Bouton vers les produits -->
@@ -46,12 +51,8 @@
   overflow: hidden;
   margin-left: -9vh; /* 🔹 Déplace la bannière vers la gauche pour couvrir tout l'écran */
   padding: 0;
-}
-
-.banner-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  background-image: url("/bretagne-flag.jpg");
+  background-size: cover;
 }
 
 .banner-overlay {
@@ -61,7 +62,7 @@
   transform: translate(-50%, -50%);
   text-align: center;
   color: white;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(95, 79, 223, 0.921);
   padding: 20px;
   border-radius: 10px;
 }

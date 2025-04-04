@@ -8,7 +8,7 @@
   <h1>Liste de produits</h1>
   <div class="contain-body-pdt">
     <ProductCard
-      v-for="pdt in data"
+      v-for="pdt in storePdt.produtos"
       :key="pdt._id"
       :pdt="pdt"
       class="pdt-card"
@@ -17,13 +17,19 @@
 </template>
 
 <script lang="ts" setup>
-import type { Product } from "~/interfaces/products";
+import type { Product } from "~/interfaces/iproducts";
 import ProductCard from "~/components/ProductCard.vue";
+import { useProductsStore } from "~/stores/storeProducts";
 
-const { data, pending, error, refresh } = await useFetch<Product[]>(
-  `http://localhost:8000/products/`,
-  {}
-);
+const storePdt = useProductsStore();
+if (!storePdt.produtos.length) {
+  await storePdt.fetchProdutos();
+}
+
+// const { data, pending, error, refresh } = await useFetch<Product[]>(
+//   `http://localhost:8000/products/`,
+//   {}
+// );
 </script>
 
 <style>
