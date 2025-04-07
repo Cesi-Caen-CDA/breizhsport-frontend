@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     "@nuxtjs/google-fonts",
     "@nuxt/icon",
     "@pinia/nuxt",
+    "@nuxt/image",
   ],
   build: {
     transpile: ["@pinia/nuxt"],
@@ -30,4 +31,5 @@ export default defineNuxtConfig({
       ],
     },
   },
+  ssr: false,
 });
