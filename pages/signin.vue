@@ -3,7 +3,12 @@
     <h2>Connexion</h2>
     <form @submit.prevent="loginUser">
       <input v-model="email" type="email" placeholder="Email" required />
-      <input v-model="password" type="password" placeholder="Mot de passe" required />
+      <input
+        v-model="password"
+        type="password"
+        placeholder="Mot de passe"
+        required
+      />
       <button
         type="submit"
         class="v-btn v-btn--block v-btn--elevated v-theme--light bg-primary v-btn--density-default v-btn--size-default v-btn--variant-elevated"
@@ -11,7 +16,9 @@
         Se connecter
       </button>
     </form>
-    <p>Pas encore inscrit ? <NuxtLink to="/signup">Créer un compte</NuxtLink></p>
+    <p>
+      Pas encore inscrit ? <NuxtLink to="/signup">Créer un compte</NuxtLink>
+    </p>
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
   </div>
 </template>
@@ -20,7 +27,8 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore"; // Assurez-vous que le chemin est correct
-
+const config = useRuntimeConfig(); // 🔹 Récupération de la configuratio
+const apiUrl = config.public.API_URL;
 const router = useRouter();
 const authStore = useAuthStore(); // 🔹 Initialisation de Pinia ici
 
@@ -30,7 +38,7 @@ const errorMessage = ref("");
 
 const loginUser = async () => {
   try {
-    const response = await $fetch("http://localhost:8000/auth/login", {
+    const response = await $fetch(`${apiUrl}/auth/login`, {
       method: "POST",
       body: { email: email.value, password: password.value },
     });
@@ -42,7 +50,8 @@ const loginUser = async () => {
     }
   } catch (error) {
     console.log(error);
-    errorMessage.value = "Échec de la connexion. Vérifiez votre email et mot de passe.";
+    errorMessage.value =
+      "Échec de la connexion. Vérifiez votre email et mot de passe.";
   }
 };
 </script>

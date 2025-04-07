@@ -3,7 +3,9 @@
     <h2>Gestion des Produits</h2>
 
     <!-- 🔹 Afficher un message si l'utilisateur n'est pas authentifié -->
-    <p v-if="!isAuthenticated" class="error">Vous devez être connecté pour gérer les produits.</p>
+    <p v-if="!isAuthenticated" class="error">
+      Vous devez être connecté pour gérer les produits.
+    </p>
 
     <!-- 🔹 Liste des produits -->
     <div v-if="isAuthenticated">
@@ -25,7 +27,9 @@
             <td>{{ product.stock }}</td>
             <td>
               <button @click="editProduct(product)">Modifier</button>
-              <button class="delete-btn" @click="deleteProduct(product._id)">Supprimer</button>
+              <button class="delete-btn" @click="deleteProduct(product._id)">
+                Supprimer
+              </button>
             </td>
           </tr>
         </tbody>
@@ -36,14 +40,44 @@
     <div v-if="isAuthenticated" class="product-form">
       <h3>{{ isEditing ? "Modifier le produit" : "Ajouter un produit" }}</h3>
       <form @submit.prevent="isEditing ? updateProduct() : createProduct()">
-        <input v-model="product.name" type="text" placeholder="Nom du produit" required />
-        <input v-model.number="product.price" type="number" placeholder="Prix" required />
-        <input v-model="product.category" type="text" placeholder="Catégorie" required />
-        <textarea v-model="product.description" placeholder="Description"></textarea>
-        <input v-model.number="product.stock" type="number" placeholder="Stock disponible" required />
+        <input
+          v-model="product.name"
+          type="text"
+          placeholder="Nom du produit"
+          required
+        />
+        <input
+          v-model.number="product.price"
+          type="number"
+          placeholder="Prix"
+          required
+        />
+        <input
+          v-model="product.category"
+          type="text"
+          placeholder="Catégorie"
+          required
+        />
+        <textarea
+          v-model="product.description"
+          placeholder="Description"
+        ></textarea>
+        <input
+          v-model.number="product.stock"
+          type="number"
+          placeholder="Stock disponible"
+          required
+        />
 
         <button type="submit">{{ isEditing ? "Modifier" : "Ajouter" }}</button>
-        <button v-if="isEditing" type="button" class="cancel-btn" @click="resetForm">Annuler</button>
+        <button
+          v-if="isEditing"
+          type="button"
+          class="cancel-btn"
+          @click="resetForm"
+        >
+          Annuler
+        </button>
       </form>
 
       <p v-if="errors.general" class="error">{{ errors.general }}</p>
@@ -56,6 +90,8 @@
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore"; // 🔹 Authentification
+const config = useRuntimeConfig();
+const apiUrl = config.public.API_URL;
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -81,7 +117,7 @@ const successMessage = ref("");
 // 🔹 Charger les produits au montage
 const fetchProducts = async () => {
   try {
-    products.value = await $fetch("http://localhost:8000/products");
+    products.value = await $fetch(ProcessingInstruction.env);
   } catch (error) {
     console.error("Erreur API :", error);
   }
@@ -90,7 +126,7 @@ const fetchProducts = async () => {
 // 🔹 Ajouter un produit
 const createProduct = async () => {
   try {
-    const response = await $fetch("http://localhost:8000/products", {
+    const response = await $fetch(`${apiUrl}/apiproducts`, {
       method: "POST",
       body: product.value,
       headers: {
@@ -115,13 +151,16 @@ const editProduct = (prod) => {
 // 🔹 Mettre à jour un produit
 const updateProduct = async () => {
   try {
-    const response = await $fetch(`http://localhost:8000/products/update/${product.value._id}`, {
-      method: "PUT",
-      body: product.value,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+    const response = await $fetch(
+      `${apiUrl}/products/update/${product.value._id}`,
+      {
+        method: "PUT",
+        body: product.value,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
 
     successMessage.value = "Produit modifié avec succès.";
     fetchProducts();
@@ -134,7 +173,7 @@ const updateProduct = async () => {
 // 🔹 Supprimer un produit
 const deleteProduct = async (id) => {
   try {
-    await $fetch(`http://localhost:8000/products/delete/${id}`, {
+    await $fetch(`${apiUrl}/products/delete/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -150,7 +189,14 @@ const deleteProduct = async (id) => {
 
 // 🔹 Réinitialiser le formulaire
 const resetForm = () => {
-  product.value = { _id: null, name: "", price: null, category: "", description: "", stock: null };
+  product.value = {
+    _id: null,
+    name: "",
+    price: null,
+    category: "",
+    description: "",
+    stock: null,
+  };
   isEditing.value = false;
   successMessage.value = "";
   errors.value = {};

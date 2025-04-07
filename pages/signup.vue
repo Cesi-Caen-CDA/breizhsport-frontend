@@ -3,7 +3,12 @@
     <h2>Inscription</h2>
     <form @submit.prevent="registerUser">
       <div class="form-group">
-        <input v-model="user.firstname" type="text" placeholder="Prénom" required />
+        <input
+          v-model="user.firstname"
+          type="text"
+          placeholder="Prénom"
+          required
+        />
         <p v-if="errors.firstname" class="error">{{ errors.firstname }}</p>
       </div>
 
@@ -18,13 +23,25 @@
       </div>
 
       <div class="form-group">
-        <input v-model="user.password" type="password" placeholder="Mot de passe" required />
+        <input
+          v-model="user.password"
+          type="password"
+          placeholder="Mot de passe"
+          required
+        />
         <p v-if="errors.password" class="error">{{ errors.password }}</p>
       </div>
 
       <div class="form-group">
-        <input v-model="confirmPassword" type="password" placeholder="Confirmer le mot de passe" required />
-        <p v-if="errors.confirmPassword" class="error">{{ errors.confirmPassword }}</p>
+        <input
+          v-model="confirmPassword"
+          type="password"
+          placeholder="Confirmer le mot de passe"
+          required
+        />
+        <p v-if="errors.confirmPassword" class="error">
+          {{ errors.confirmPassword }}
+        </p>
       </div>
 
       <button type="submit">S'inscrire</button>
@@ -42,6 +59,8 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore"; // 🔹 Importation du store
 
+const config = useRuntimeConfig(); // 🔹 Récupération de la configuratio
+const apiUrl = config.public.API_URL;
 const router = useRouter();
 const authStore = useAuthStore(); // 🔹 Initialisation de Pinia
 
@@ -64,7 +83,7 @@ const registerUser = async () => {
 
   try {
     // 🔹 Étape 1 : Inscription
-    const registerResponse = await $fetch("http://localhost:8000/users", {
+    const registerResponse = await $fetch(`${apiUrl}/users`, {
       method: "POST",
       body: user.value,
     });
@@ -77,7 +96,7 @@ const registerUser = async () => {
     const userId = registerResponse.user._id.toString();
 
     // 🔹 Étape 2 : Connexion automatique après l'inscription
-    const loginResponse = await $fetch("http://localhost:8000/auth/login", {
+    const loginResponse = await $fetch(`${apiUrl}/auth/login`, {
       method: "POST",
       body: {
         email: user.value.email,

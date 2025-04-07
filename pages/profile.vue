@@ -2,7 +2,9 @@
   <div class="container">
     <h2>Mon Profil</h2>
 
-    <p v-if="!isAuthenticated" class="error">Vous devez être connecté pour voir votre profil.</p>
+    <p v-if="!isAuthenticated" class="error">
+      Vous devez être connecté pour voir votre profil.
+    </p>
 
     <div v-if="isAuthenticated">
       <div class="profile-info">
@@ -14,15 +16,38 @@
       <div class="profile-form">
         <h3>Modifier mon profil</h3>
         <form @submit.prevent="updateProfile">
-          <input v-model="user.firstname" type="text" placeholder="Prénom" required />
-          <input v-model="user.lastname" type="text" placeholder="Nom" required />
+          <input
+            v-model="user.firstname"
+            type="text"
+            placeholder="Prénom"
+            required
+          />
+          <input
+            v-model="user.lastname"
+            type="text"
+            placeholder="Nom"
+            required
+          />
 
           <!-- 🔹 Email non modifiable -->
-          <input v-model="user.email" type="email" placeholder="Email" disabled />
+          <input
+            v-model="user.email"
+            type="email"
+            placeholder="Email"
+            disabled
+          />
 
           <!-- 🔹 Modification du mot de passe -->
-          <input v-model="password" type="password" placeholder="Nouveau mot de passe" />
-          <input v-model="confirmPassword" type="password" placeholder="Confirmer le mot de passe" />
+          <input
+            v-model="password"
+            type="password"
+            placeholder="Nouveau mot de passe"
+          />
+          <input
+            v-model="confirmPassword"
+            type="password"
+            placeholder="Confirmer le mot de passe"
+          />
           <p v-if="errors.password" class="error">{{ errors.password }}</p>
 
           <button type="submit">Mettre à jour</button>
@@ -32,7 +57,9 @@
         <p v-if="successMessage" class="success">{{ successMessage }}</p>
       </div>
 
-      <button class="delete-btn" @click="deleteAccount">Supprimer mon compte</button>
+      <button class="delete-btn" @click="deleteAccount">
+        Supprimer mon compte
+      </button>
     </div>
   </div>
 </template>
@@ -42,6 +69,8 @@ import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 
+const config = useRuntimeConfig();
+const apiUrl = config.public.API_URL;
 const router = useRouter();
 const authStore = useAuthStore();
 const isAuthenticated = computed(() => authStore.isAuthenticated);
@@ -68,7 +97,7 @@ const fetchUserProfile = async () => {
       return;
     }
 
-    const response = await $fetch(`http://localhost:8000/users/profile/${userId}`, {
+    const response = await $fetch(`${apiUrl}/users/profile/${userId}`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -94,7 +123,7 @@ const updateProfile = async () => {
   try {
     const token = localStorage.getItem("token");
 
-    await $fetch(`http://localhost:8000/users/profile/${user.value._id}`, {
+    await $fetch(`${apiUrl}/users/profile/${user.value._id}`, {
       method: "PATCH",
       body: {
         firstname: user.value.firstname,
@@ -119,7 +148,7 @@ const deleteAccount = async () => {
   try {
     const token = localStorage.getItem("token");
 
-    await $fetch(`http://localhost:8000/users/${user.value._id}`, {
+    await $fetch(`${apiUrl}/users/${user.value._id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
